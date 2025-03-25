@@ -25,6 +25,26 @@ export class MacroHomeScreen extends MacroScreen {
             deviceStateTab: '//*[@text="Device State"]',
             airPlaneMode: '//*[@text="Airplane Mode"]',
             airPlaneModeDisabledCheckbox: '//*[@text="Airplane Mode Disabled"]',
+            localVariableTab: '//*[@text="Local Variables"]',
+            addLocalVariable: '//android.widget.ImageButton[@resource-id="com.arlosoft.macrodroid:id/addVariableButton"]',
+            variableNameText: '//*[@text="Enter variable name"]',
+            variableTypeDropdown: '//android.widget.CheckedTextView[@resource-id="android:id/text1"]',
+            variableTypeOption: (type: string) => `//android.widget.CheckedTextView[@resource-id="android:id/text1" and @text="${type}"]`,
+            localVariableValue: '//*[@resource-id="com.arlosoft.macrodroid:id/macro_edit_entry_name"]',
+            actionBlockMenu: '//*[@text="Action Blocks"]',
+            addActionBlock: '//android.widget.ImageButton[@resource-id="com.arlosoft.macrodroid:id/fab"]',
+            actionBlockName: '//*[@text="Action block name"]',
+            actionBlockDescription: '//*[@text="Enter Description"]',
+            addInputVariableButton: '//*[@resource-id="com.arlosoft.macrodroid:id/addInputVariableButton"]',
+            addOutVariableButton: '//*[@resource-id="com.arlosoft.macrodroid:id/addOutputVariableButton"]',
+            inputCollapseExpandButton: `//*[@resource-id="com.arlosoft.macrodroid:id/inputCollapseExpandButton"]`,
+            outputCollapseExpandButton: `//*[@resource-id="com.arlosoft.macrodroid:id/outputCollapseExpandButton"]`,
+            acceptButton: `//*[@content-desc="Accept"]`,
+            nameActionBlockAdded: `//*[@resource-id="com.arlosoft.macrodroid:id/name"]`,
+            descriptionActionBlockAdded: `//*[@resource-id="com.arlosoft.macrodroid:id/description"]`,
+            backButton: `//*[@resource-id="com.arlosoft.macrodroid:id/actionBack"]`,
+            macroName: '//*[@text="Enter macro name"]',
+            saveButton: '//*[@text="SAVE"]',
         };
 
         const macroElementsIOS = {
@@ -45,6 +65,26 @@ export class MacroHomeScreen extends MacroScreen {
             deviceStateTab: '',
             airPlaneMode: '',
             airPlaneModeDisabledCheckbox: '',
+            localVariableTab: '',
+            addLocalVariable: '',
+            variableNameText: '',
+            variableTypeDropdown: '',
+            variableTypeOption: '',
+            localVariableValue: '',
+            actionBlockMenu: '',
+            addActionBlock: '',
+            actionBlockName: '',
+            actionBlockDescription: '',
+            addInputVariableButton: '',
+            addOutVariableButton: '',
+            inputCollapseExpandButton: '',
+            outputCollapseExpandButton: '',
+            acceptButton: '',
+            nameActionBlockAdded: '',
+            descriptionActionBlockAdded: '',
+            backButton: '',
+            macroName: '',
+            saveButton: '',
         };
         let macroElements  = driver.isAndroid ? macroElementsAndroid : macroElementsIOS;
         return macroElements;
@@ -54,6 +94,10 @@ export class MacroHomeScreen extends MacroScreen {
 
     async clickSkipBtn() {
         await this.waitAndClick((await this.getMacroElements()).skipBtn);
+    }
+
+    async clickSaveBtn() {
+        await this.waitAndClick((await this.getMacroElements()).saveButton);
     }
 
     async clickNavigateUpBtn() {
@@ -107,6 +151,9 @@ export class MacroHomeScreen extends MacroScreen {
     async clickAddConstraints() {
         await this.waitAndClick((await this.getMacroElements()).addConstraints);
     }
+    async clickBackButton() {
+        await this.waitAndClick((await this.getMacroElements()).backButton);
+    }
 
     async clickDeviceStateTab() {
         await this.waitAndClick((await this.getMacroElements()).deviceStateTab);
@@ -115,9 +162,76 @@ export class MacroHomeScreen extends MacroScreen {
     async clickAirPlaneMode() {
         await this.waitAndClick((await this.getMacroElements()).airPlaneMode);
     }
+    async inputMacroName(name: string) {
+        await this.waitAndFill((await this.getMacroElements()).macroName, name);
+    }
     
     async clickAirPlaneModeDisabledCheckbox() {
         await this.waitAndClick((await this.getMacroElements()).airPlaneModeDisabledCheckbox);
+    }
+
+    async addLocalVariable(localVariable: string, typeOfVariable: string) {
+        await this.waitAndClick((await this.getMacroElements()).localVariableTab);
+        await this.waitAndClick((await this.getMacroElements()).addLocalVariable);
+        await this.waitAndFill((await this.getMacroElements()).variableNameText, localVariable);
+        await this.waitAndClick((await this.getMacroElements()).variableTypeDropdown);
+        await this.waitAndClick((await this.getMacroElements()).variableTypeOption(typeOfVariable));
+    }
+
+    async clickActionBlock() {
+        await this.waitAndClick((await this.getMacroElements()).actionBlockMenu);
+    }
+
+    async clickAddActionBlock() {
+        await this.waitAndClick((await this.getMacroElements()).addActionBlock);
+    }
+
+    async inputActionBlockName(name: string) {
+        await this.waitAndFill((await this.getMacroElements()).actionBlockName, name);
+    }
+
+    async inputActionBlockDescription(description: string) {
+        await this.waitAndFill((await this.getMacroElements()).actionBlockDescription, description);
+    }
+
+    async addInputVariable(variable: string, typeOfVariable: string) {
+        await this.waitAndClick((await this.getMacroElements()).addInputVariableButton);
+        await this.waitAndFill((await this.getMacroElements()).variableNameText, variable);
+        await this.waitAndClick((await this.getMacroElements()).variableTypeDropdown);
+        await this.waitAndClick((await this.getMacroElements()).variableTypeOption(typeOfVariable));
+    }
+
+    async updateBooleanVariableInActionBlock(variable: string, value: string) {
+        const variableNameLocator = `//*[@text="${variable}"]`;
+        const valueBoolean = `//*[@text="${value}"]`;
+        await this.waitAndClick(variableNameLocator);
+        await this.waitAndClick(valueBoolean);
+    }
+
+    async addOutputVariable(variable: string, typeOfVariable: string) {
+        await this.waitAndClick((await this.getMacroElements()).addOutVariableButton);
+        await this.waitAndFill((await this.getMacroElements()).variableNameText, variable);
+        await this.waitAndClick((await this.getMacroElements()).variableTypeDropdown);
+        await this.waitAndClick((await this.getMacroElements()).variableTypeOption(typeOfVariable));
+    }
+
+    async clickInputCollapseExpandButton() {
+        await this.waitAndClick((await this.getMacroElements()).inputCollapseExpandButton);
+    }
+
+    async clickAcceptButton() {
+        await this.waitAndClick((await this.getMacroElements()).acceptButton);
+    }
+
+    async clickOutputCollapseExpandButton() {
+        await this.waitAndClick((await this.getMacroElements()).outputCollapseExpandButton);
+    }
+
+    async updateStringVariable(variable: string, value: string) {
+        const variableNameLocator = `//*[@text="${variable}"]`;
+        const valueTextbox = `//*[@resource-id="com.arlosoft.macrodroid:id/enter_variable_dialog_value"]`;
+        await this.waitAndClick(variableNameLocator);
+        await this.waitAndFill(valueTextbox, value);
     }
 
     /*==================Verification==============*/
@@ -132,5 +246,14 @@ export class MacroHomeScreen extends MacroScreen {
 
     async verifyConstraintValue(value: string){
         expect(this.verifyTextContent((await this.getMacroElements()).airPlaneModeDisabledCheckbox, value));
+    }
+
+    async verifyLocalVariableValue(value: string){
+        expect(this.verifyTextContent((await this.getMacroElements()).localVariableValue, value));
+    }
+
+    async verifyActionBlockAdded(value: string, description: string){
+        expect(this.verifyTextContent((await this.getMacroElements()).nameActionBlockAdded, value));
+        expect(this.verifyTextContent((await this.getMacroElements()).descriptionActionBlockAdded, description));
     }
 }
